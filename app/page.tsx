@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
@@ -11,14 +11,13 @@ export default function ReceiptRpgApp() {
   const [maxHp] = useState<number>(300000);
   const [storeName, setStoreName] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
-  const [partyName, setPartyName] = useState<string>('我が家パーティ');
+  const [partyName] = useState<string>('我が家パーティ');
   const [items, setItems] = useState<Array<{ name: string; type: string; price: number; bonus: string }>>([
     { name: '旅立ちの布服', type: 'armor', price: 1500, bonus: '防御力+5' },
     { name: 'ポーション（お茶）', type: 'potion', price: 150, bonus: 'HP微回復' },
   ]);
   const [isAiProcessing, setIsAiProcessing] = useState<boolean>(false);
 
-  // レシート登録＆アイテム変換（AI解析＆Supabase同期シミュレーション含む）
   const handleAddReceipt = (e: React.FormEvent) => {
     e.preventDefault();
     const cost = parseInt(amount, 10);
@@ -37,25 +36,22 @@ export default function ReceiptRpgApp() {
     setItems([generatedItem, ...items]);
     setStoreName('');
     setAmount('');
-    alert(`⚔️ 討伐完了！ ${cost.g ? cost : cost.toLocaleString()}G のダメージと引き換えに新しい装備を手に入れた！`);
+    alert('⚔️ 討伐完了！ダメージと引き換えに新しい装備を手に入れた！');
   };
 
-  // AIレシート画像解析シミュレーション
   const handleAiScan = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setIsAiProcessing(true);
     setTimeout(() => {
-      // AIが画像を解析したと仮定して自動入力
       setStoreName('冒険者ギルド前スーパー');
       setAmount('2480');
       setIsAiProcessing(false);
-      ✨ alert('🔮 AI画像解析完了！レシートから店名と金額を自動抽出しました！');
+      alert('🔮 AI画像解析完了！レシートから店名と金額を自動抽出しました！');
     }, 1500);
   };
 
-  // 給料日全回復イベント
   const handleSalaryReset = () => {
     setHp(maxHp);
     alert('✨ 給料日イベント発動！パーティ全体のHP（所持金）が全回復しました！ ✨');
@@ -68,7 +64,6 @@ export default function ReceiptRpgApp() {
         <p style={{ fontSize: '14px', color: '#7f8c8d' }}>AI解析 & パーティ共有で、毎月の買い物を大冒険に！</p>
       </header>
 
-      {/* パーティ（家族）ステータス */}
       <section style={{ background: '#e8f8f5', border: '2px solid #a3e4d7', borderRadius: '12px', padding: '16px', marginBottom: '20px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
           <span style={{ fontWeight: 'bold', color: '#117a65' }}>🏰 パーティ名: {partyName}</span>
@@ -89,11 +84,9 @@ export default function ReceiptRpgApp() {
         </button>
       </section>
 
-      {/* AIレシート自動解析 ＆ 手動登録フォーム */}
       <section style={{ background: '#fff', border: '1px solid #ddd', borderRadius: '12px', padding: '16px', marginBottom: '20px' }}>
         <h2 style={{ fontSize: '18px', marginBottom: '12px' }}>📷 レシート登録（AI自動解析対応）</h2>
         
-        {/* AIカメラ読み込みボタン */}
         <div style={{ marginBottom: '15px', background: '#ebf5fb', padding: '12px', borderRadius: '8px', border: '1px dashed #3498db', textAlign: 'center' }}>
           <label style={{ cursor: 'pointer', color: '#2980b9', fontWeight: 'bold', display: 'block' }}>
             {isAiProcessing ? '🔮 AIがレシートを解析中...' : '📸 レシート画像を撮影して自動入力'}
@@ -127,7 +120,6 @@ export default function ReceiptRpgApp() {
         </form>
       </section>
 
-      {/* 冒険の戦利品（インベントリ） */}
       <section>
         <h2 style={{ fontSize: '18px', marginBottom: '12px' }}>🎒 パーティのインベントリ（戦利品一覧）</h2>
         <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
