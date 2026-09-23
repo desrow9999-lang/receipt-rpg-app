@@ -32,6 +32,7 @@ export default function ReceiptRpgApp() {
   const [amount, setAmount] = useState<string>('');
   const [category, setCategory] = useState<string>('食費');
   const [partyName] = useState<string>('我が家パーティ');
+  const [buff, setBuff] = useState<string>('なし（通常状態）');
   
   const [items, setItems] = useState<Item[]>([
     { name: '旅立ちの布服', category: '日用品', price: 1500, bonus: '防御力+5', rarity: 'N' },
@@ -42,11 +43,19 @@ export default function ReceiptRpgApp() {
     name: 'インフレゴブリン',
     hp: 15000,
     maxHp: 15000,
-    reward: '討伐報酬: モチベーション+100',
+    reward: '討伐報酬: 獲得EXP 1.5倍バフ獲得！',
   });
 
   const [isAiProcessing, setIsAiProcessing] = useState<boolean>(false);
   const [battleLog, setBattleLog] = useState<string>('モンスターが現れた！レシートのダメージで撃退せよ！');
+
+  // カテゴリ別の合計金額を計算
+  const categoryTotals = items.reduce((acc, item) => {
+    acc[item.category] = (acc[item.category] || 0) + item.price;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const totalSpent = items.reduce((sum, item) => sum + item.price, 0);
 
   const handleAddReceipt = (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,12 +95,14 @@ export default function ReceiptRpgApp() {
 
     let newMonsterHp = monster.hp - cost;
     if (newMonsterHp <= 0) {
-      setBattleLog(`✨ ${monster.name} を討伐した！ ${monster.reward}`);
+      alert(`✨ 討伐成功！ ${monster.name} を倒した！豪華報酬を手に入れた！`);
+      setBuff(monster.reward);
+      setBattleLog(`✨ ${monster.name} を討伐！次の強敵が現れた！`);
       setMonster({
         name: '浪費の魔王グリード',
         hp: 50000,
         maxHp: 50000,
-        reward: '討伐報酬: 宝箱ドロップ率アップ',
+        reward: '討伐報酬: 給料日ボーナスアップ',
       });
     } else {
       setMonster({ ...monster, hp: newMonsterHp });
@@ -135,13 +146,13 @@ export default function ReceiptRpgApp() {
   return (
     <main style={{ padding: '12px', maxWidth: '600px', margin: '0 auto', fontFamily: 'sans-serif', color: '#333', boxSizing: 'border-box' }}>
       <header style={{ textAlign: 'center', marginBottom: '12px' }}>
-        <h1 style={{ fontSize: '20px', color: '#2c3e50', margin: '0 0 4px 0' }}>🛡️ レシートRPG家計簿</h1>
+        <h1 style={{ fontSize: '20px', color: '#2c3e50', margin: '0 0 4px 0' }}>🛡️ レシートRPG家計簿（完全版）</h1>
         <p style={{ fontSize: '12px', color: '#7f8c8d', margin: 0 }}>使ったお金がダメージとなり、魔王を討伐する家計簿RPG！</p>
       </header>
 
       {/* 浪費警告（ピンチ演出） */}
       {isDanger && (
-        <section style={{ background: '#fadbd8', border: '2px solid #e74c3c', borderRadius: '12px', padding: '10px', marginBottom: '12px', textAlign: 'center', animation: 'pulse 1s infinite' }}>
+        <section style={{ background: '#fadbd8', border: '2px solid #e74c3c', borderRadius: '12px', padding: '10px', marginBottom: '12px', textAlign: 'center' }}>
           <span style={{ color: '#c0392b', fontWeight: 'bold', fontSize: '13px' }}>
             ⚠️ 【緊急警告】パーティのHP（残高）が20%を切りました！これ以上の浪費は全滅の危機です！
           </span>
@@ -149,7 +160,7 @@ export default function ReceiptRpgApp() {
       )}
 
       {/* ステータスセクション */}
-      <section style={{ background: isDanger ? '#fdedec' : '#e8f8f5', border: `2px solid ${isDanger ? '#e74c3c' : '#a3e4d7'}`, borderRadius: '12px', padding: '12px', marginBottom: '12px', transition: 'background 0.3s' }}>
+      <section style={{ background: isDanger ? '#fdedec' : '#e8f8f5', border: `2px solid ${isDanger ? '#e74c3c' : '#a3e4d7'}`, borderRadius: '12px', padding: '12px', marginBottom: '12px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
           <span style={{ fontWeight: 'bold', color: isDanger ? '#c0392b' : '#117a65', fontSize: '13px' }}>🏰 {partyName} (Lv.{level})</span>
           <span style={{ fontSize: '10px', background: isDanger ? '#e74c3c' : '#117a65', color: '#fff', padding: '2px 5px', borderRadius: '4px', whiteSpace: 'nowrap' }}>EXP: {exp} / {nextExp}</span>
@@ -158,8 +169,11 @@ export default function ReceiptRpgApp() {
           <span style={{ whiteSpace: 'nowrap' }}>共有HP残高</span>
           <span style={{ color: isDanger ? '#e74c3c' : '#117a65', whiteSpace: 'nowrap' }}>{hp.toLocaleString()} / {maxHp.toLocaleString()} G</span>
         </div>
-        <div style={{ width: '100%', background: isDanger ? '#fadbd8' : '#d1f2eb', borderRadius: '8px', height: '12px', overflow: 'hidden', marginBottom: '8px' }}>
+        <div style={{ width: '100%', background: isDanger ? '#fadbd8' : '#d1f2eb', borderRadius: '8px', height: '12px', overflow: 'hidden', marginBottom: '6px' }}>
           <div style={{ width: `${(hp / maxHp) * 100}%`, background: isDanger ? '#e74c3c' : '#1abc9c', height: '100%', transition: 'width 0.3s ease' }} />
+        </div>
+        <div style={{ fontSize: '11px', color: '#555', marginBottom: '8px' }}>
+          ✨ 発動中バフ: <strong style={{ color: '#d35400' }}>{buff}</strong>
         </div>
         <button 
           onClick={handleSalaryReset} 
@@ -167,6 +181,22 @@ export default function ReceiptRpgApp() {
         >
           💰 給料日（パーティHP全回復）
         </button>
+      </section>
+
+      {/* カテゴリ別 集計ボード */}
+      <section style={{ background: '#fef9e7', border: '2px solid #f9e79f', borderRadius: '12px', padding: '12px', marginBottom: '12px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', fontWeight: 'bold', fontSize: '13px', color: '#7d6608' }}>
+          <span>📊 カテゴリ別出費集計</span>
+          <span>総支出: -{totalSpent.toLocaleString()} G</span>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px' }}>
+          {['食費', '日用品', '趣味・娯楽', '固定費', 'その他'].map((cat) => (
+            <div key={cat} style={{ background: '#fff', padding: '6px 8px', borderRadius: '6px', border: '1px solid #fcf3cf', display: 'flex', justifyContent: 'space-between', fontSize: '11px' }}>
+              <span style={{ fontWeight: 'bold', color: '#555' }}>{cat}</span>
+              <span style={{ color: '#c0392b', fontWeight: 'bold' }}>{(categoryTotals[cat] || 0).toLocaleString()} G</span>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* モンスターバトルセクション */}
