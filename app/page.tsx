@@ -38,7 +38,7 @@ export default function ReceiptRpgApp() {
   ]);
 
   const [monster, setMonster] = useState<Monster>({
-    name: '物価高のインフレゴブリン',
+    name: 'インフレゴブリン',
     hp: 15000,
     maxHp: 15000,
     reward: '討伐報酬: モチベーション+100',
@@ -52,11 +52,9 @@ export default function ReceiptRpgApp() {
     const cost = parseInt(amount, 10);
     if (isNaN(cost) || cost <= 0) return;
 
-    // HP（残高）減少
     const nextHp = Math.max(0, hp - cost);
     setHp(nextHp);
 
-    // 経験値獲得（金額の10%がEXPになる）
     const gainedExp = Math.floor(cost * 0.1);
     let currentExp = exp + gainedExp;
     let currentLevel = level;
@@ -73,7 +71,6 @@ export default function ReceiptRpgApp() {
     setExp(currentExp);
     setNextExp(nextLevelExp);
 
-    // アイテム自動生成（レアリティ判定）
     const rarity: 'N' | 'R' | 'SR' | 'SSR' = cost > 30000 ? 'SSR' : cost > 10000 ? 'SR' : cost > 3000 ? 'R' : 'N';
     const type = cost > 10000 ? 'weapon' : cost > 3000 ? 'armor' : 'potion';
     
@@ -87,7 +84,6 @@ export default function ReceiptRpgApp() {
 
     setItems([generatedItem, ...items]);
 
-    // モンスターへのダメージ処理
     let newMonsterHp = monster.hp - cost;
     if (newMonsterHp <= 0) {
       setBattleLog(`✨ ${monster.name} を討伐した！ ${monster.reward}`);
@@ -144,10 +140,10 @@ export default function ReceiptRpgApp() {
       <section style={{ background: '#e8f8f5', border: '2px solid #a3e4d7', borderRadius: '12px', padding: '12px', marginBottom: '12px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
           <span style={{ fontWeight: 'bold', color: '#117a65', fontSize: '13px' }}>🏰 {partyName} (Lv.{level})</span>
-          <span style={{ fontSize: '10px', background: '#117a65', color: '#fff', padding: '2px 5px', borderRadius: '4px' }}>EXP: {exp} / {nextExp}</span>
+          <span style={{ fontSize: '10px', background: '#117a65', color: '#fff', padding: '2px 5px', borderRadius: '4px', whiteSpace: 'nowrap' }}>EXP: {exp} / {nextExp}</span>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px', fontWeight: 'bold', fontSize: '13px' }}>
-          <span style={{ whiteSpace: 'nowrap' }}>パーティ共有 HP（残高）</span>
+          <span style={{ whiteSpace: 'nowrap' }}>共有HP残高</span>
           <span style={{ color: '#117a65', whiteSpace: 'nowrap' }}>{hp.toLocaleString()} / {maxHp.toLocaleString()} G</span>
         </div>
         <div style={{ width: '100%', background: '#d1f2eb', borderRadius: '8px', height: '12px', overflow: 'hidden', marginBottom: '8px' }}>
@@ -163,9 +159,9 @@ export default function ReceiptRpgApp() {
 
       {/* モンスターバトルセクション */}
       <section style={{ background: '#fdedec', border: '2px solid #f5b7b1', borderRadius: '12px', padding: '12px', marginBottom: '12px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontWeight: 'bold', fontSize: '13px', color: '#c0392b' }}>
-          <span>👹 討伐対象: {monster.name}</span>
-          <span>HP: {monster.hp.toLocaleString()} / {monster.maxHp.toLocaleString()}</span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px', fontWeight: 'bold', fontSize: '13px', color: '#c0392b', gap: '4px' }}>
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>👹 討伐: {monster.name}</span>
+          <span style={{ whiteSpace: 'nowrap' }}>HP: {monster.hp.toLocaleString()}</span>
         </div>
         <div style={{ width: '100%', background: '#fadbd8', borderRadius: '8px', height: '10px', overflow: 'hidden', marginBottom: '6px' }}>
           <div style={{ width: `${Math.max(0, (monster.hp / monster.maxHp) * 100)}%`, background: '#e74c3c', height: '100%', transition: 'width 0.3s ease' }} />
@@ -212,7 +208,7 @@ export default function ReceiptRpgApp() {
 
       {/* インベントリセクション */}
       <section>
-        <h2 style={{ fontSize: '15px', margin: '0 0 8px 0' }}>🎒 パーティのインベントリ（戦利品一覧）</h2>
+        <h2 style={{ fontSize: '15px', margin: '0 0 8px 0' }, style={{ fontSize: '15px', margin: '0 0 8px 0' }}>🎒 パーティのインベントリ（戦利品一覧）</h2>
         <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
           {items.map((item, index) => (
             <li key={index} style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '8px', padding: '8px 10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
