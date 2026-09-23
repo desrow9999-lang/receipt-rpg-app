@@ -1,12 +1,10 @@
 'use client';
-'type client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-// Supabaseクライアントの設定（環境変数から読み込み、または直接設定）
-// ※実際の環境に合わせて書き換えてください
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+// ビルドエラー回避用のプレースホルダー設定
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default function ReceiptRpgApp() {
@@ -19,17 +17,14 @@ export default function ReceiptRpgApp() {
     { name: 'ポーション（お茶）', type: 'potion', price: 150, bonus: 'HP微回復' },
   ]);
 
-  // レシート送信（買い物＝ダメージ＆アイテム変換）のシミュレーション
   const handleAddReceipt = (e: React.FormEvent) => {
     e.preventDefault();
     const cost = parseInt(amount, 10);
     if (isNaN(cost) || cost <= 0) return;
 
-    // 残りHPを減らす
     const nextHp = Math.max(0, hp - cost);
     setHp(nextHp);
 
-    // 金額に応じたRPGアイテムへの変換ロジック（AI風モック）
     let generatedItem = {
       name: storeName ? `${storeName}の戦利品` : '謎のアイテム',
       type: cost > 5000 ? 'weapon' : cost > 1000 ? 'armor' : 'potion',
@@ -42,7 +37,6 @@ export default function ReceiptRpgApp() {
     setAmount('');
   };
 
-  // 給料日全回復イベント
   const handleSalaryReset = () => {
     setHp(maxHp);
     alert('✨ 給料日イベント発動！HP（所持金）が全回復しました！ ✨');
@@ -55,13 +49,11 @@ export default function ReceiptRpgApp() {
         <p style={{ fontSize: '14px', color: '#7f8c8d' }}>買い物を冒険に変える、痛快マネー管理</p>
       </header>
 
-      {/* ステータスカード */}
       <section style={{ background: '#f8f9fa', border: '2px solid #e9ecef', borderRadius: '12px', padding: '16px', marginBottom: '20px', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontWeight: 'bold' }}>
           <span>プレイヤーHP（残高）</span>
           <span>{hp.toLocaleString()} / {maxHp.toLocaleString()} G</span>
         </div>
-        {/* HPゲージ */}
         <div style={{ width: '100%', background: '#e0e0e0', borderRadius: '8px', height: '16px', overflow: 'hidden' }}>
           <div style={{ width: `${(hp / maxHp) * 100}%`, background: hp < 50000 ? '#e74c3c' : '#2ecc71', height: '100%', transition: 'width 0.3s ease' }} />
         </div>
@@ -73,7 +65,6 @@ export default function ReceiptRpgApp() {
         </button>
       </section>
 
-      {/* レシート登録フォーム */}
       <section style={{ background: '#fff', border: '1px solid #ddd', borderRadius: '12px', padding: '16px', marginBottom: '20px' }}>
         <h2 style={{ fontSize: '18px', marginBottom: '12px' }}>📷 レシートを登録（装備調達）</h2>
         <form onSubmit={handleAddReceipt} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -101,7 +92,6 @@ export default function ReceiptRpgApp() {
         </form>
       </section>
 
-      {/* ゲットした装備・アイテム一覧 */}
       <section>
         <h2 style={{ fontSize: '18px', marginBottom: '12px' }}>🎒 装備・所持品インベントリ</h2>
         <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
