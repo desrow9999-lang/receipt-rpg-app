@@ -208,7 +208,7 @@ export default function ReceiptRpgApp() {
 
       {/* インベントリセクション */}
       <section>
-        <h2 style={{ fontSize: '15px', margin: '0 0 8px 0' }, style={{ fontSize: '15px', margin: '0 0 8px 0' }}>🎒 パーティのインベントリ（戦利品一覧）</h2>
+        <h2 style={{ fontSize: '15px', margin: '0 0 8px 0' }}>🎒 パーティのインベントリ（戦利品一覧）</h2>
         <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
           {items.map((item, index) => (
             <li key={index} style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '8px', padding: '8px 10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
