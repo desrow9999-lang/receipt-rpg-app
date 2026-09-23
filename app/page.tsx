@@ -36,7 +36,7 @@ export default function ReceiptRpgApp() {
     setItems([generatedItem, ...items]);
     setStoreName('');
     setAmount('');
-    alert('⚔️ 討伐完了！ダメージと引き換えに新しい装備を手に入れた！');
+    alert('討伐完了！ダメージと引き換えに新しい装備を手に入れた！');
   };
 
   const handleAiScan = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,25 +48,25 @@ export default function ReceiptRpgApp() {
       setStoreName('冒険者ギルド前スーパー');
       setAmount('2480');
       setIsAiProcessing(false);
-      alert('🔮 AI画像解析完了！レシートから店名と金額を自動抽出しました！');
+      alert('AI画像解析完了！レシートから店名と金額を自動抽出しました！');
     }, 1500);
   };
 
   const handleSalaryReset = () => {
     setHp(maxHp);
-    alert('✨ 給料日イベント発動！パーティ全体のHP（所持金）が全回復しました！ ✨');
+    alert('給料日イベント発動！パーティ全体のHP（所持金）が全回復しました！');
   };
 
   return (
     <main style={{ padding: '20px', maxWidth: '600px', margin: '0 auto', fontFamily: 'sans-serif', color: '#333' }}>
       <header style={{ textAlign: 'center', marginBottom: '20px' }}>
-        <h1 style={{ fontSize: '24px', color: '#2c3e50' }}>🛡️ レシートRPG家計簿（完全版）</h1>
+        <h1 style={{ fontSize: '24px', color: '#2c3e50' }}>レシートRPG家計簿（完全版）</h1>
         <p style={{ fontSize: '14px', color: '#7f8c8d' }}>AI解析 & パーティ共有で、毎月の買い物を大冒険に！</p>
       </header>
 
       <section style={{ background: '#e8f8f5', border: '2px solid #a3e4d7', borderRadius: '12px', padding: '16px', marginBottom: '20px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-          <span style={{ fontWeight: 'bold', color: '#117a65' }}>🏰 パーティ名: {partyName}</span>
+          <span style={{ fontWeight: 'bold', color: '#117a65' }}>パーティ名: {partyName}</span>
           <span style={{ fontSize: '12px', background: '#117a65', color: '#fff', padding: '2px 6px', borderRadius: '4px' }}>マルチプレイ中</span>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontWeight: 'bold' }}>
@@ -80,16 +80,16 @@ export default function ReceiptRpgApp() {
           onClick={handleSalaryReset} 
           style={{ marginTop: '12px', width: '100%', background: '#f1c40f', border: 'none', padding: '8px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}
         >
-          💰 給料日（パーティHP全回復）
+          給料日（パーティHP全回復）
         </button>
       </section>
 
       <section style={{ background: '#fff', border: '1px solid #ddd', borderRadius: '12px', padding: '16px', marginBottom: '20px' }}>
-        <h2 style={{ fontSize: '18px', marginBottom: '12px' }}>📷 レシート登録（AI自動解析対応）</h2>
+        <h2 style={{ fontSize: '18px', marginBottom: '12px' }}>レシート登録（AI自動解析対応）</h2>
         
         <div style={{ marginBottom: '15px', background: '#ebf5fb', padding: '12px', borderRadius: '8px', border: '1px dashed #3498db', textAlign: 'center' }}>
           <label style={{ cursor: 'pointer', color: '#2980b9', fontWeight: 'bold', display: 'block' }}>
-            {isAiProcessing ? '🔮 AIがレシートを解析中...' : '📸 レシート画像を撮影して自動入力'}
+            {isAiProcessing ? 'AIがレシートを解析中...' : 'レシート画像を撮影して自動入力'}
             <input type="file" accept="image/*" onChange={handleAiScan} style={{ display: 'none' }} disabled={isAiProcessing} />
           </label>
         </div>
@@ -121,7 +121,7 @@ export default function ReceiptRpgApp() {
       </section>
 
       <section>
-        <h2 style={{ fontSize: '18px', marginBottom: '12px' }}>🎒 パーティのインベントリ（戦利品一覧）</h2>
+        <h2 style={{ fontSize: '18px', marginBottom: '12px' }}>パーティのインベントリ（戦利品一覧）</h2>
         <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {items.map((item, index) => (
             <li key={index} style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '8px', padding: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
