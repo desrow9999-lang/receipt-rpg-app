@@ -57,6 +57,11 @@ export default function ReceiptRpgApp() {
 
   const totalSpent = items.reduce((sum, item) => sum + item.price, 0);
 
+  // Stripe決済ページへ移動する関数
+  const handleUpgrade = () => {
+    window.location.href = 'https://buy.stripe.com/7sYdR83Lg62BeNt8aWeZ20d';
+  };
+
   const handleAddReceipt = (e: React.FormEvent) => {
     e.preventDefault();
     const cost = parseInt(amount, 10);
@@ -149,6 +154,16 @@ export default function ReceiptRpgApp() {
         <h1 style={{ fontSize: '20px', color: '#2c3e50', margin: '0 0 4px 0' }}>🛡️ レシートRPG家計簿（完全版）</h1>
         <p style={{ fontSize: '12px', color: '#7f8c8d', margin: 0 }}>使ったお金がダメージとなり、魔王を討伐する家計簿RPG！</p>
       </header>
+
+      {/* プレミアムパス加入ボタン */}
+      <section style={{ marginBottom: '12px' }}>
+        <button 
+          onClick={handleUpgrade} 
+          style={{ width: '100%', background: 'linear-gradient(135deg, #f39c12, #d35400)', color: '#fff', border: 'none', padding: '10px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', fontSize: '13px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+        >
+          👑 プレミアムパスに加入する（月額サブスクリプション）
+        </button>
+      </section>
 
       {/* 浪費警告（ピンチ演出） */}
       {isDanger && (
